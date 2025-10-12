@@ -1,9 +1,19 @@
 {
-  "posts": [
-    { "id": 1, "title": "Hola Mundo", "author": "Juan" },
-    { "id": 2, "title": "Segundo Post", "author": "Ana" }
+  "users": [
+    {
+      "id": 1,
+      "email": "admin@admin.com",
+      "password": "Admin123",
+      "rol": "Admin",
+      "nombre": "Administrador General"
+    },
+    {
+      "id": 2,
+      "email": "juan@empresa.com",
+      "password": "Juan123",
+      "rol": "Empleado",
+      "nombre": "Juan Pérez"
+    }
   ],
-  "comments": [
-    { "id": 1, "body": "Buen post!", "postId": 1 }
-  ]
+  "tasks": []
 }
