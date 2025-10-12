@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+/* Fondo global para toda la app */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: url('assets/Fondo-de-proyecto.jpg') no-repeat center center fixed;
+  background-size: cover;
+
+  /* Se crea un pseudo-elemento para el efecto de aclarado y desenfoque */
+  position: relative;
+  z-index: 0;
+}
+
+/* Capa sobre el fondo para aclarar y desenfocar */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(6px); /* desenfoque del fondo */
+  z-index: -1; /* detrás de todo el contenido */
+}
+ 
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

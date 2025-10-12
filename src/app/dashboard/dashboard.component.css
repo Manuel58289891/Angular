@@ -1,0 +1,68 @@
+/* Contenedor general centrado horizontalmente, ajustando verticalmente */
+.grid-page-container {
+  display: flex;
+  justify-content: center; /* centra horizontalmente */
+  align-items: flex-start; /* alineamos al inicio vertical */
+  height: 100vh;           /* ocupa toda la altura de la pantalla */
+  width: 100%;
+  background-color: transparent;
+  box-sizing: border-box;
+  padding: 16px;
+}
+
+/* Ajuste del grid para centrar horizontalmente y bajar un poco */
+mat-grid-list {
+  width: 800px;       /* ancho total del grid aumentado */
+  max-width: 95%;     /* responsive para pantallas pequeñas */
+  margin-top: 120px;  /* mueve el grid hacia abajo */
+  display: block;     /* para que margin-top funcione */
+}
+
+/* Cada tile */
+.mat-grid-tile {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Efecto hover en cada tile */
+.mat-grid-tile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Contenido interno de cada tile */
+.tile-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Diferentes colores según clase */
+.blue-tile {
+  background: linear-gradient(135deg, #2196F3, #21CBF3);
+}
+
+.red-tile {
+  background: linear-gradient(135deg, #F44336, #FF7961);
+}
+
+/* Títulos dentro del tile */
+.tile-content h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Párrafos dentro del tile */
+.tile-content p {
+  margin: 8px 0 0 0;
+  font-size: 16px;
+}

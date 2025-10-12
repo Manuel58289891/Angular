@@ -1,0 +1,48 @@
+/* Tabla general */
+table {
+  width: 100%;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 40px auto;
+  padding: 20px;
+  max-width: 900px;
+  background: #fff;
+  border: 2px solid #1976d2;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  overflow-x: auto;
+}
+
+/* Encabezado: título + filtro */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.titulo {
+  margin: 0;
+  font-size: 1.8em;
+  color: #1976d2;
+}
+
+/* Estilo del filtro */
+.filter-input {
+  width: 350px;
+}
+
+.filter-input input {
+  background-color: rgba(144, 85, 255, 0.333)
+}
+
+/* Botón agregar usuario centrado debajo */ 
+.add-user-button-container {
+   display: flex; justify-content: center; 
+   margin-top: 20px; 
+}

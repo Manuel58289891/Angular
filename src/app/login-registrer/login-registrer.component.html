@@ -1,0 +1,159 @@
+<div class="page-container">
+  <mat-card class="example-card" appearance="outlined">
+    <mat-card-header class="card-header-center">
+      <mat-card-title>Guajiritos S.R.L</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-tab-group>
+
+        <!-- Pestaña Login -->
+        <mat-tab label="Iniciar Sesión">
+          <form class="form-container" (ngSubmit)="login()">
+
+            <!-- Email -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Correo Electrónico</mat-label>
+              <input
+                matInput
+                placeholder="Ingrese su correo"
+                [formControl]="emailControl"
+                required
+              >
+              <mat-error *ngIf="emailControl.hasError('required')">
+                El correo es obligatorio
+              </mat-error>
+              <mat-error *ngIf="emailControl.hasError('email')">
+                Debe ser un correo válido
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Contraseña -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Contraseña</mat-label>
+              <input
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                [formControl]="passwordControl"
+                placeholder="Ingrese su contraseña"
+                required
+              >
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="toggleHide()"
+                class="icon-eye"
+              >
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="passwordControl.hasError('required')">
+                La contraseña es obligatoria
+              </mat-error>
+              <mat-error *ngIf="passwordControl.hasError('minlength')">
+                La contraseña debe tener al menos 6 caracteres
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Mensaje de error si credenciales incorrectas -->
+            <div *ngIf="loginError" class="login-error">{{ loginError }}</div>
+
+            <button mat-raised-button color="primary" type="submit">Ingresar</button>
+          </form>
+        </mat-tab>
+
+        <!-- Pestaña Crear Cuenta -->
+        <mat-tab label="Crear Cuenta">
+          <form class="form-container">
+
+            <!-- Nombre y Apellidos -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Nombre y Apellidos</mat-label>
+              <input
+                matInput
+                placeholder="Ingrese su nombre y apellidos"
+                [formControl]="nombreCompletoControlRegistro"
+                required
+              >
+              <mat-error *ngIf="nombreCompletoControlRegistro.hasError('required')">
+                El nombre y apellidos son obligatorios
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Carnet de Identidad -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Carnet de Identidad</mat-label>
+              <input
+                matInput
+                placeholder="Ingrese su CI"
+                [formControl]="ciControl"
+                maxlength="11"
+                (keypress)="soloNumeros($event)"
+                required
+              >
+              <mat-error *ngIf="ciControl.hasError('required')">
+                El Carnet de Identidad es obligatorio
+              </mat-error>
+              <mat-error *ngIf="ciControl.hasError('minlength') || ciControl.hasError('maxlength')">
+                El Carnet de Identidad debe tener exactamente 11 números
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Contraseña -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Contraseña</mat-label>
+              <input
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                [formControl]="passwordControlRegistro"
+                placeholder="Ingrese su contraseña"
+                required
+              >
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="toggleHide()"
+                class="icon-eye"
+              >
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="passwordControlRegistro.hasError('required')">
+                La contraseña es obligatoria
+              </mat-error>
+              <mat-error *ngIf="passwordControlRegistro.hasError('minlength')">
+                La contraseña debe tener al menos 6 caracteres
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Confirmar Contraseña -->
+            <mat-form-field class="form-full-width">
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input
+                matInput
+                [type]="hide ? 'password' : 'text'"
+                [formControl]="confirmPasswordControl"
+                placeholder="Repita su contraseña"
+                required
+              >
+              <button
+                mat-icon-button
+                matSuffix
+                type="button"
+                (click)="toggleHide()"
+                class="icon-eye"
+              >
+                <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="confirmPasswordControl.hasError('required')">
+                La confirmación de contraseña es obligatoria
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary">Registrar</button>
+          </form>
+        </mat-tab>
+
+      </mat-tab-group>
+    </mat-card-content>
+  </mat-card>
+</div>

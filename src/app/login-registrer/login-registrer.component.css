@@ -1,0 +1,95 @@
+/* Contenedor que ocupa toda la ventana y centra el contenido */
+.page-container {
+  display: flex;
+  justify-content: center; /* centra horizontalmente */
+  align-items: center;     /* centra verticalmente */
+  height: 100vh;           /* altura completa de la ventana */
+  width: 100vw;
+  background-color: transparent
+}
+
+/* Mantener el card con un ancho máximo */
+.example-card {
+  width: 100%;
+  max-width: 500px; /* ajusta según necesites */
+}
+
+.card-header-center {
+  display: flex;
+  justify-content: center; /* centra horizontalmente */
+  align-items: center;     /* centra verticalmente si hay altura */
+  text-align: center;      /* asegura que el texto quede centrado */
+}
+
+.card-header-center mat-card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #3f51b5; /* opcional: color azul */
+}
+
+
+.example-card {
+  max-width: 400px;
+}
+
+.example-card-footer {
+  padding: 16px;
+}
+/* Contenedor general de los formularios */
+.form-container {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+/* Inputs que ocupan todo el ancho */
+.form-full-width {
+  width: 100%;
+}
+
+/* Botones principales del formulario (Ingresar / Registrar) */
+.form-container button:not([mat-icon-button]) {
+  background-color: #3f51b5; /* azul Material */
+  color: #fff;
+  border: 2px solid #3f51b5;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.form-container button:not([mat-icon-button]):hover {
+  background-color: #303f9f; /* azul más oscuro */
+  border-color: #303f9f;
+  box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+/* Mantener estilo original del botón de mostrar/ocultar contraseña */
+.mat-icon-button {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  color: rgba(0,0,0,0.54);
+  transition: color 0.3s ease;
+}
+
+.mat-icon-button:hover {
+  color: rgba(0,0,0,0.87);
+}
+
+.icon-eye {
+  margin-right: 8px; /* ajusta este valor para separarlo más o menos */
+}
+
+

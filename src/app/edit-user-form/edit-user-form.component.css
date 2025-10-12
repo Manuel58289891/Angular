@@ -1,0 +1,42 @@
+/* Contenedor principal del formulario */
+.form-container {
+  display: flex;
+  flex-direction: column; /* inputs uno debajo del otro */
+  gap: 12px; /* espacio entre cada input */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Cada mat-form-field ocupa todo el ancho disponible */
+.form-container mat-form-field {
+  width: 100%;
+}
+
+/* Botones alineados al centro con separación */
+.form-actions {
+  display: flex;
+  justify-content: center; /* centrado horizontal */
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Ajuste del contenido del diálogo para hacerlo más pequeño */
+.mat-dialog-container {
+  max-width: 360px; /* ancho máximo más reducido */
+  padding: 12px 16px; /* menos padding interno */
+  box-sizing: border-box;
+}
+
+/* Título centrado y con estilo */
+.dialog-title {
+  text-align: center; /* centra horizontalmente */
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1976d2;
+  margin-bottom: 12px;
+}
+
+/* Reducir altura de los inputs si quieres */
+.mat-form-field {
+  margin-bottom: 8px;
+}

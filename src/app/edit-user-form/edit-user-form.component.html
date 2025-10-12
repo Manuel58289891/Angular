@@ -1,0 +1,46 @@
+<mat-dialog-content>
+  <div class="form-container">
+     <h2 class="dialog-title">
+    {{ usuario ? 'Editar Usuario' : 'Agregar Usuario' }}
+    </h2>
+
+    <form [formGroup]="agregarForm">
+
+      <mat-form-field>
+        <mat-label>Nombre</mat-label>
+        <input matInput formControlName="nombre">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellidos</mat-label>
+        <input matInput formControlName="apellidos">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Carnet de Identidad</mat-label>
+        <input 
+          matInput
+          formControlName="ci"
+          maxlength="11"
+        >
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Rol</mat-label>
+        <mat-select formControlName="rol">
+          <mat-option value="Admin">Admin</mat-option>
+          <mat-option value="Desarrollador Backend">Desarrollador Backend</mat-option>
+          <mat-option value="Desarrollador Frontend">Desarrollador Frontend</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="form-actions">
+    <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar</button>
+    <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
+  </div>
+</mat-dialog-actions>

@@ -1,0 +1,24 @@
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+/* Estilo del título del diálogo */
+.dialog-title {
+  text-align: center;       /* centrado horizontal */
+  color: #1e88e5;           /* azul */
+  font-size: 1.5rem;        /* tamaño más grande */
+  font-weight: bold;         /* negrita */
+  margin-bottom: 16px;       /* espacio debajo del título */
+}
+
+/* Inputs uno debajo del otro con espacio */
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;      /* espacio entre inputs */
+}
