@@ -34,18 +34,21 @@ export class LoginRegistrerComponent {
 
   hide = true;
   loginError: string = '';
+  registerError: string = '';
+  registerSuccess: string = '';
 
   // Campos de login
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   passwordControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
-  // Campos de registro (los puedes mantener)
+  // Campos de registro
   nombreCompletoControlRegistro = new FormControl('', Validators.required);
   ciControl = new FormControl('', [
     Validators.required,
     Validators.minLength(11),
     Validators.maxLength(11)
   ]);
+  emailControlRegistro = new FormControl('', [Validators.required, Validators.email]);
   passwordControlRegistro = new FormControl('', [Validators.required, Validators.minLength(6)]);
   confirmPasswordControl = new FormControl('', Validators.required);
 
@@ -62,6 +65,9 @@ export class LoginRegistrerComponent {
     }
   }
 
+  // -------------------
+  // LOGIN
+  // -------------------
   login() {
     const email = this.emailControl.value;
     const password = this.passwordControl.value;
@@ -73,12 +79,10 @@ export class LoginRegistrerComponent {
 
     this.authService.login(email, password).subscribe({
       next: (res) => {
-        // Guardar token y rol en localStorage
         localStorage.setItem('token', res.accessToken);
-        localStorage.setItem('rol', res.user.rol);
+        localStorage.setItem('rol', res.user.role);
 
-        // Redirigir según rol
-        if (res.user.rol === 'Admin') {
+        if (res.user.role === 'admin') {
           this.router.navigate(['/dashboard']);
         } else {
           this.router.navigate(['/my-tasks']);
@@ -86,6 +90,49 @@ export class LoginRegistrerComponent {
       },
       error: () => {
         this.loginError = 'Correo o contraseña incorrectos';
+      }
+    });
+  }
+
+  // -------------------
+  // REGISTRAR USUARIO
+  // -------------------
+  register() {
+    const nombre = this.nombreCompletoControlRegistro.value;
+    const ci = this.ciControl.value;
+    const email = this.emailControlRegistro.value;
+    const password = this.passwordControlRegistro.value;
+    const confirmPassword = this.confirmPasswordControl.value;
+
+    if (!nombre || !ci || !email || !password || !confirmPassword) {
+      this.registerError = 'Todos los campos son obligatorios';
+      this.registerSuccess = '';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      this.registerError = 'Las contraseñas no coinciden';
+      this.registerSuccess = '';
+      return;
+    }
+
+    this.authService.register(email, password, nombre, 'user').subscribe({
+      next: (res) => {
+        console.log('Usuario registrado:', res);
+        this.registerSuccess = 'Usuario registrado correctamente';
+        this.registerError = '';
+
+        // Limpiar campos
+        this.nombreCompletoControlRegistro.reset();
+        this.ciControl.reset();
+        this.emailControlRegistro.reset();
+        this.passwordControlRegistro.reset();
+        this.confirmPasswordControl.reset();
+      },
+      error: (err) => {
+        console.error('Error registrando usuario:', err);
+        this.registerError = 'Error al registrar el usuario';
+        this.registerSuccess = '';
       }
     });
   }

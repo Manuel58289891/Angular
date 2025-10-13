@@ -1,19 +1,6 @@
 {
   "users": [
-    {
-      "id": 1,
-      "email": "admin@admin.com",
-      "password": "Admin123",
-      "rol": "Admin",
-      "nombre": "Administrador General"
-    },
-    {
-      "id": 2,
-      "email": "juan@empresa.com",
-      "password": "Juan123",
-      "rol": "Empleado",
-      "nombre": "Juan Pérez"
-    }
+  
   ],
   "tasks": []
 }
