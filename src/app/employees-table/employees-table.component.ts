@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,22 +9,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { EditUserFormComponent } from '../edit-user-form/edit-user-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 export interface Trabajador {
-  nombre: string;
-  apellidos: string;
+  id: number;
+  nombre_apellidos: string;
+  email: string;
+  rol: string;
   ci: string;
-  rol: 'Admin' | 'Desarrollador Backend' | 'Desarrollador Frontend';
-  password: string; // nueva propiedad
 }
-
-const ELEMENT_DATA: Trabajador[] = [
-  { nombre: 'Carlos', apellidos: 'Pérez López', ci: '91022345678', rol: 'Admin', password: 'C4rl0s#1' },
-  { nombre: 'María', apellidos: 'Rodríguez Sánchez', ci: '95011478901', rol: 'Desarrollador Backend', password: 'M4r!aB7' },
-  { nombre: 'José', apellidos: 'Fernández Díaz', ci: '92030512345', rol: 'Desarrollador Frontend', password: 'J0s3@F9' },
-  { nombre: 'Ana', apellidos: 'García Morales', ci: '96042756789', rol: 'Desarrollador Backend', password: 'An@12345' },
-  { nombre: 'Luis', apellidos: 'Martínez Herrera', ci: '94081234567', rol: 'Desarrollador Frontend', password: 'Lui$5678' }
-];
 
 @Component({
   selector: 'app-employees-table',
@@ -40,48 +33,71 @@ const ELEMENT_DATA: Trabajador[] = [
     MatInputModule,
     MatSelectModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmployeesTableComponent {
-  displayedColumns: string[] = ['nombre', 'apellidos', 'ci', 'rol', 'password', 'acciones'];
-  dataSource = new MatTableDataSource<Trabajador>(ELEMENT_DATA);
-
+export class EmployeesTableComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'nombre_apellidos', 'ci', 'email', 'rol', 'acciones'];
+  dataSource = new MatTableDataSource<Trabajador>();
   readonly dialog = inject(MatDialog);
+  readonly http = inject(HttpClient);
+  apiUrl = 'http://localhost:3001/users'; // json-server URL
+
+  ngOnInit(): void {
+    this.loadUsuarios();
+  }
+
+  loadUsuarios() {
+    this.http.get<any[]>(this.apiUrl).subscribe(data => {
+      this.dataSource.data = data.map(user => ({
+        id: user.id,
+        nombre_apellidos: user.name || '',
+        email: user.email || '',
+        rol: user.role || '',
+        ci: user.ci || ''   
+      }));
+    });
+  }
 
   openDialog(usuario: Trabajador): void {
     const dialogRef = this.dialog.open(EditUserFormComponent, { data: usuario });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const index = this.dataSource.data.findIndex(u => u === usuario);
-        if (index > -1) {
-          this.dataSource.data[index] = result;
-          this.dataSource._updateChangeSubscription();
-        }
-      }
-    });
-  }
-
-  openAddDialog(): void {
-    const dialogRef = this.dialog.open(EditUserFormComponent, { data: null });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.dataSource.data = [...this.dataSource.data, result];
+        // Guardar cambios en JSON server
+        this.http.patch(`${this.apiUrl}/${usuario.id}`, {
+          name: result.nombre_apellidos,
+          email: result.email,
+          role: result.rol,
+          ci: result.ci
+        }).subscribe(() => {
+          const index = this.dataSource.data.findIndex(u => u.id === usuario.id);
+          if (index > -1) {
+            this.dataSource.data[index] = { ...this.dataSource.data[index], ...result };
+            this.dataSource._updateChangeSubscription();
+          }
+        });
       }
     });
   }
 
   eliminarUsuario(usuario: Trabajador) {
-    this.dataSource.data = this.dataSource.data.filter(u => u !== usuario);
+    this.http.delete(`${this.apiUrl}/${usuario.id}`).subscribe(() => {
+      this.dataSource.data = this.dataSource.data.filter(u => u.id !== usuario.id);
+    });
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value.toLowerCase().trim();
     this.dataSource.filterPredicate = (data: Trabajador, filter: string) => {
-      const dataStr = (data.nombre + data.apellidos + data.rol + data.password).toLowerCase();
-      return dataStr.includes(filter.toLowerCase());
+      return (
+        data.nombre_apellidos.toLowerCase().includes(filter) ||
+        data.ci.toLowerCase().includes(filter) ||
+        data.email.toLowerCase().includes(filter) ||
+        data.rol.toLowerCase().includes(filter)
+      );
     };
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue;
   }
 }

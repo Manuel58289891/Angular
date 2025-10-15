@@ -54,7 +54,7 @@
             <!-- Email -->
             <mat-form-field class="form-full-width">
               <mat-label>Correo Electrónico</mat-label>
-              <input matInput  placeholder="example@gmail.com"  [formControl]="emailControlRegistro" required>
+              <input matInput placeholder="example@gmail.com" [formControl]="emailControlRegistro" required>
               <mat-error *ngIf="emailControlRegistro.hasError('required')">El correo es obligatorio</mat-error>
               <mat-error *ngIf="emailControlRegistro.hasError('email')">Debe ser un correo válido</mat-error>
             </mat-form-field>

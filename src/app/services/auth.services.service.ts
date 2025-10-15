@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 export interface User {
   email: string;
-  rol: 'Admin' | 'Usuario';
+  role: string;
+  ci: string;
   accessToken?: string;
 }
 
@@ -19,15 +20,20 @@ export class AuthService {
   login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password });
   }
-  register(email: string, password: string, name: string, role: string = 'user'): Observable<any> {
-  return this.http.post(`${this.apiUrl}/register`, { 
+
+  register(email: string, password: string, name: string, ci: string = ''): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users`, { 
       email, 
       password, 
       name, 
-      role   
+      role: 'Usuario',
+      ci 
     });
   }
 
+  getUsers(): Observable<User[]> {
+    const token = localStorage.getItem('token') || '';
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<User[]>(`${this.apiUrl}/users`, { headers });
+  }
 }
-
-

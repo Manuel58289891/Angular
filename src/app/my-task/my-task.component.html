@@ -1,1 +1,41 @@
+<div class="page-container">
+  <h2>Mis Tareas</h2>
+
+  <table mat-table [dataSource]="dataSource" class="full-width-table">
+
+    <!-- Nombre de la tarea -->
+    <ng-container matColumnDef="tarea">
+      <th mat-header-cell *matHeaderCellDef> Tarea </th>
+      <td mat-cell *matCellDef="let element"> {{element.tarea}} </td>
+    </ng-container>
+
+    <!-- Tipo de tarea -->
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef> Tipo </th>
+      <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+    </ng-container>
+
+    <!-- Estado -->
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef> Estado </th>
+      <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+    </ng-container>
+
+    <!-- Acciones -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Cambiar Estado </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-button color="primary" *ngIf="element.estado==='Pendiente'" (click)="cambiarEstado(element, 'Completada')">
+          Marcar como Completada
+        </button>
+        <button mat-button color="warn" *ngIf="element.estado==='Completada'" (click)="cambiarEstado(element, 'Pendiente')">
+          Marcar como Pendiente
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
 

@@ -1,6 +1,47 @@
 {
   "users": [
-  
+    {
+      "email": "jorge@gmail.com",
+      "password": "$2a$10$offDRRPNsgJjTD4PmvCmoevnXjCfl7WO4tRyY0csZ2BHDFoRrgxuC",
+      "name": "Jorge Perez Paz",
+      "role": "Admin",
+      "ci": "01104655614",
+      "id": 1
+    },
+    {
+      "email": "juana@gmail.com",
+      "password": "$2a$10$yOqa3kH8smlxQn7mDTIsduBgKXbSWgcNJmhM018ac4RGa8AIQPnAe",
+      "name": "Juana Bacallao Zamora",
+      "role": "Desarrollador Backend",
+      "ci": "27120356641",
+      "id": 2
+    },
+    {
+      "email": "pablo@gmail.com",
+      "password": "$2a$10$AsChPZBblP.ZXsMm.i1aGOfq9UFgfhOm4RJYBVFdBks3Z8bnw8wx6",
+      "name": "Pablo Santos Morales",
+      "role": "Admin",
+      "ci": "58082424826",
+      "id": 3
+    },
+    {
+      "email": "marcos@gmail.com",
+      "password": "$2a$10$yZqjpwJfkYVAzdZX0.iHbeI6kdJKGg0DKhHHpH1MUNhpLD4oAnt72",
+      "name": "Marcos Torres Pompa",
+      "role": "Usuario",
+      "ci": "54120345561",
+      "id": 4
+    }
   ],
-  "tasks": []
+  "tasks": [
+    {
+      "nombre": "Juana",
+      "apellidos": "Bacallao Zamora",
+      "ci": "27120356641",
+      "tipo": "Frontend",
+      "tarea": "Corre de aqui al Ameijeiras",
+      "estado": "Pendiente",
+      "id": 1
+    }
+  ]
 }

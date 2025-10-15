@@ -1,31 +1,27 @@
 <mat-dialog-content>
   <div class="form-container">
-     <h2 class="dialog-title">
-    {{ usuario ? 'Editar Usuario' : 'Agregar Usuario' }}
-    </h2>
+    <h2 class="dialog-title">{{ usuario ? 'Editar Usuario' : 'Agregar Usuario' }}</h2>
 
     <form [formGroup]="agregarForm">
 
-      <mat-form-field>
-        <mat-label>Nombre</mat-label>
-        <input matInput formControlName="nombre">
+      <mat-form-field class="full-width">
+        <mat-label>Nombre y Apellidos</mat-label>
+        <input matInput formControlName="nombre_apellidos">
       </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Apellidos</mat-label>
-        <input matInput formControlName="apellidos">
+      <mat-form-field class="full-width">
+        <mat-label>Correo Electrónico</mat-label>
+        <input matInput formControlName="email">
+        <mat-error *ngIf="agregarForm.get('email')?.hasError('required')">El correo es obligatorio</mat-error>
+        <mat-error *ngIf="agregarForm.get('email')?.hasError('email')">Debe ser un correo válido</mat-error>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field class="full-width">
         <mat-label>Carnet de Identidad</mat-label>
-        <input 
-          matInput
-          formControlName="ci"
-          maxlength="11"
-        >
+        <input matInput formControlName="ci" maxlength="11">
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field class="full-width">
         <mat-label>Rol</mat-label>
         <mat-select formControlName="rol">
           <mat-option value="Admin">Admin</mat-option>
@@ -38,9 +34,7 @@
   </div>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-  <div class="form-actions">
-    <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar</button>
-    <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
-  </div>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="guardarCambios()" [disabled]="agregarForm.invalid">Guardar</button>
+  <button mat-button mat-dialog-close (click)="cancelar()">Cancelar</button>
 </mat-dialog-actions>

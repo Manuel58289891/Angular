@@ -9,7 +9,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../services/auth.services.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-registrer',
@@ -25,6 +27,7 @@ import { AuthService } from '../services/auth.services.service';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     RouterModule
   ],
   templateUrl: './login-registrer.component.html',
@@ -78,14 +81,24 @@ export class LoginRegistrerComponent {
     }
 
     this.authService.login(email, password).subscribe({
-      next: (res) => {
+      next: (res: any) => {
+        // Guardamos token
         localStorage.setItem('token', res.accessToken);
-        localStorage.setItem('rol', res.user.role);
 
-        if (res.user.role === 'admin') {
-          this.router.navigate(['/dashboard']);
+        // Obtenemos datos del usuario directamente desde la respuesta
+        const user = res.user; // json-server-auth devuelve user con email, role, ci
+        if (user) {
+          localStorage.setItem('rol', user.role);
+          localStorage.setItem('ci', user.ci || '');
+
+          const roleLower = user.role.toLowerCase();
+          if (roleLower.includes('admin')) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.router.navigate(['/my-task']);
+          }
         } else {
-          this.router.navigate(['/my-tasks']);
+          this.loginError = 'No se recibió información del usuario';
         }
       },
       error: () => {
@@ -116,11 +129,22 @@ export class LoginRegistrerComponent {
       return;
     }
 
-    this.authService.register(email, password, nombre, 'user').subscribe({
-      next: (res) => {
+    // Registramos al usuario
+    this.authService.register(email, password, nombre, ci).subscribe({
+      next: (res: any) => {
         console.log('Usuario registrado:', res);
         this.registerSuccess = 'Usuario registrado correctamente';
         this.registerError = '';
+
+        // Guardamos token y rol si viene
+        if (res.accessToken && res.user) {
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('rol', res.user.role);
+          localStorage.setItem('ci', res.user.ci || '');
+        }
+
+        // Redirigimos a my-task
+        this.router.navigate(['/my-task']);
 
         // Limpiar campos
         this.nombreCompletoControlRegistro.reset();
