@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-
+import { MatTabsModule } from '@angular/material/tabs';
 export interface Tarea {
   id?: number;
   nombre: string;
@@ -26,6 +26,7 @@ export interface Tarea {
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    MatTabsModule,
     HttpClientModule
   ],
   templateUrl: './my-task.component.html',
