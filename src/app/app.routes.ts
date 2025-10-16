@@ -6,7 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MyTaskComponent } from './my-task/my-task.component';
 export const routes: Routes = [
     {path:'workerstable',component:EmployeesTableComponent},
-    {path:'mytasks',component:MyTaskComponent},
+    {path:'my-task',component:MyTaskComponent},
     {path:'dashboard', component:DashboardComponent},
     {path:'task',component:TaskManagerComponent},
     {path:'**', component: LoginRegistrerComponent},];

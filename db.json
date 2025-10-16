@@ -31,6 +31,14 @@
       "role": "Usuario",
       "ci": "54120345561",
       "id": 4
+    },
+    {
+      "email": "juan@gmail.com",
+      "password": "$2a$10$aehvyv.K3nFdhccXtVL4/e3vo05KGR1Sy94b/D7i4dALkL7YLy.N2",
+      "name": "Olga Ruiz Paz",
+      "role": "Usuario",
+      "ci": "56478912330",
+      "id": 5
     }
   ],
   "tasks": [
@@ -40,7 +48,7 @@
       "ci": "27120356641",
       "tipo": "Frontend",
       "tarea": "Corre de aqui al Ameijeiras",
-      "estado": "Pendiente",
+      "estado": "Completada",
       "id": 1
     }
   ]
