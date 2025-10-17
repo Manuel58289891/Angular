@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +10,9 @@ import { CommonModule } from '@angular/common';
 import { EditUserFormComponent } from '../edit-user-form/edit-user-form.component';
 import { MatDialog } from '@angular/material/dialog';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {  PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { NavigationService } from '../services/navigation/navigation.service';
 
 export interface Trabajador {
   id: number;
@@ -43,7 +46,15 @@ export class EmployeesTableComponent implements OnInit {
   dataSource = new MatTableDataSource<Trabajador>();
   readonly dialog = inject(MatDialog);
   readonly http = inject(HttpClient);
-  apiUrl = 'http://localhost:3001/users'; // json-server URL
+  apiUrl = 'http://localhost:3001/users';
+
+  constructor(
+  @Inject(PLATFORM_ID) private platformId: Object,
+  private navigationService: NavigationService
+) {}
+ goBack() {
+    this.navigationService.goBack();
+  }
 
   ngOnInit(): void {
     this.loadUsuarios();
@@ -56,7 +67,7 @@ export class EmployeesTableComponent implements OnInit {
         nombre_apellidos: user.name || '',
         email: user.email || '',
         rol: user.role || '',
-        ci: user.ci || ''   
+        ci: user.ci || ''
       }));
     });
   }
@@ -65,7 +76,6 @@ export class EmployeesTableComponent implements OnInit {
     const dialogRef = this.dialog.open(EditUserFormComponent, { data: usuario });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Guardar cambios en JSON server
         this.http.patch(`${this.apiUrl}/${usuario.id}`, {
           name: result.nombre_apellidos,
           email: result.email,

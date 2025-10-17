@@ -1,24 +1,32 @@
-/* Tabla general */
-table {
+/* Contenedor general */
+.page-container {
+  display: flex;
+  justify-content: center;
   width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: transparent;
 }
 
-/* Contenedor de la tabla */
+.table-wrapper {
+  width: 100%;
+  max-width: 900px;
+}
+
 .table-container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin: 40px auto;
-  padding: 20px;
-  max-width: 900px;
   background: #fff;
   border: 2px solid #1976d2;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 20px;
   overflow-x: auto;
+  margin: 40px auto;
 }
 
-/* Encabezado: título + filtro */
+/* Encabezado */
 .table-header {
   display: flex;
   justify-content: space-between;
@@ -32,17 +40,52 @@ table {
   color: #1976d2;
 }
 
-/* Estilo del filtro */
+/* Filtro */
 .filter-input {
   width: 350px;
 }
 
 .filter-input input {
-  background-color: rgba(144, 85, 255, 0.333)
+  background-color: rgba(144, 85, 255, 0.2);
 }
 
-/* Botón agregar usuario centrado debajo */ 
-.add-user-button-container {
-   display: flex; justify-content: center; 
-   margin-top: 20px; 
+/* Tabla */
+table {
+  width: 100%;
 }
+
+/* Botón Volver */
+.back-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #3f51b5;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.back-button:hover {
+  background-color: #303f9f;
+  transform: translateY(-2px);
+}
+
+.back-button:active {
+  background-color: #283593;
+  transform: translateY(0);
+}
+
+/* Botones de acciones (edit/delete) de Angular Material no se ven afectados */

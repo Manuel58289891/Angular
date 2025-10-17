@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,11 +10,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
-import { AuthService } from '../services/auth.services.service';
-import { HttpHeaders } from '@angular/common/http';
-
+import { AuthService } from '../services/auth.services.service/auth.services.service';
+import { PLATFORM_ID } from '@angular/core';
 @Component({
-  selector: 'app-login-registrer',
+  selector: 'app-login-register',
   standalone: true,
   imports: [
     CommonModule,
@@ -30,32 +29,31 @@ import { HttpHeaders } from '@angular/common/http';
     MatSelectModule,
     RouterModule
   ],
-  templateUrl: './login-registrer.component.html',
-  styleUrls: ['./login-registrer.component.css'],
+  templateUrl: './login-register.component.html',
+  styleUrls: ['./login-register.component.css'],
 })
-export class LoginRegistrerComponent {
-
+export class LoginRegisterComponent {
   hide = true;
   loginError: string = '';
   registerError: string = '';
   registerSuccess: string = '';
 
-  // Campos de login
+  // Controles login
   emailControl = new FormControl('', [Validators.required, Validators.email]);
   passwordControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
-  // Campos de registro
+  // Controles registro
   nombreCompletoControlRegistro = new FormControl('', Validators.required);
-  ciControl = new FormControl('', [
-    Validators.required,
-    Validators.minLength(11),
-    Validators.maxLength(11)
-  ]);
+  ciControl = new FormControl('', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]);
   emailControlRegistro = new FormControl('', [Validators.required, Validators.email]);
   passwordControlRegistro = new FormControl('', [Validators.required, Validators.minLength(6)]);
   confirmPasswordControl = new FormControl('', Validators.required);
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
   toggleHide() {
     this.hide = !this.hide;
@@ -68,9 +66,6 @@ export class LoginRegistrerComponent {
     }
   }
 
-  // -------------------
-  // LOGIN
-  // -------------------
   login() {
     const email = this.emailControl.value;
     const password = this.passwordControl.value;
@@ -82,23 +77,23 @@ export class LoginRegistrerComponent {
 
     this.authService.login(email, password).subscribe({
       next: (res: any) => {
-        // Guardamos token
-        localStorage.setItem('token', res.accessToken);
-
-        // Obtenemos datos del usuario directamente desde la respuesta
-        const user = res.user; // json-server-auth devuelve user con email, role, ci
-        if (user) {
-          localStorage.setItem('rol', user.role);
-          localStorage.setItem('ci', user.ci || '');
-
-          const roleLower = user.role.toLowerCase();
-          if (roleLower.includes('admin')) {
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.router.navigate(['/my-task']);
-          }
-        } else {
+        if (!res || !res.user) {
           this.loginError = 'No se recibió información del usuario';
+          return;
+        }
+
+        const user = res.user;
+
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('currentUser', JSON.stringify(user)); 
+        }
+
+        const role = user.role.trim().toLowerCase();
+        if (role === 'admin') {
+          this.router.navigate(['/dashboard']); // Admin → dashboard
+        } else {
+          this.router.navigate(['/my-task']);  // Usuario normal → sus tareas
         }
       },
       error: () => {
@@ -107,9 +102,6 @@ export class LoginRegistrerComponent {
     });
   }
 
-  // -------------------
-  // REGISTRAR USUARIO
-  // -------------------
   register() {
     const nombre = this.nombreCompletoControlRegistro.value;
     const ci = this.ciControl.value;
@@ -129,24 +121,19 @@ export class LoginRegistrerComponent {
       return;
     }
 
-    // Registramos al usuario
     this.authService.register(email, password, nombre, ci).subscribe({
       next: (res: any) => {
-        console.log('Usuario registrado:', res);
         this.registerSuccess = 'Usuario registrado correctamente';
         this.registerError = '';
 
-        // Guardamos token y rol si viene
-        if (res.accessToken && res.user) {
+        if (res.accessToken && res.user && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('token', res.accessToken);
-          localStorage.setItem('rol', res.user.role);
-          localStorage.setItem('ci', res.user.ci || '');
+          localStorage.setItem('currentUser', JSON.stringify(res.user));
         }
 
-        // Redirigimos a my-task
         this.router.navigate(['/my-task']);
 
-        // Limpiar campos
+        // Limpiar formularios
         this.nombreCompletoControlRegistro.reset();
         this.ciControl.reset();
         this.emailControlRegistro.reset();

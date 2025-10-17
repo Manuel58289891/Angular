@@ -1,14 +1,17 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { AddTaskComponent } from '../add-task/add-task.component';
+import { MatDialog } from '@angular/material/dialog';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { NavigationService } from '../services/navigation/navigation.service';
 
 export interface Trabajador {
   nombre: string;
@@ -46,29 +49,38 @@ export interface Tarea {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskManagerComponent implements OnInit {
-  apiUrl = 'http://localhost:3001';
+  
 
+  apiUrl = 'http://localhost:3001';
   displayedColumns: string[] = ['nombre', 'apellidos', 'tarea', 'tipo', 'estado'];
   dataSource = new MatTableDataSource<Tarea>();
   readonly dialog = inject(MatDialog);
-
   usuarios: Trabajador[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private navigationService: NavigationService
+  ) {}
+
+  goBack() {
+    this.navigationService.goBack();
+  }
+
+
+  getAuthHeaders(): HttpHeaders {
+    let token = '';
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('token') || '';
+    }
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
 
   ngOnInit(): void {
     this.loadUsuarios();
     this.loadTasks();
   }
 
-  getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token') || '';
-    return new HttpHeaders({ Authorization: `Bearer ${token}` });
-  }
-
-  // --------------------
-  // Cargar usuarios desde JSON Server
-  // --------------------
   loadUsuarios() {
     this.http.get<any[]>(`${this.apiUrl}/users`, { headers: this.getAuthHeaders() })
       .subscribe(data => {
@@ -81,17 +93,11 @@ export class TaskManagerComponent implements OnInit {
       });
   }
 
-  // --------------------
-  // Cargar tareas desde JSON Server
-  // --------------------
   loadTasks() {
     this.http.get<Tarea[]>(`${this.apiUrl}/tasks`, { headers: this.getAuthHeaders() })
       .subscribe(data => this.dataSource.data = data);
   }
 
-  // --------------------
-  // Abrir diálogo para agregar tarea
-  // --------------------
   openAddTaskDialog() {
     const dialogRef = this.dialog.open(AddTaskComponent, { data: { usuarios: this.usuarios } });
     dialogRef.afterClosed().subscribe(result => {
@@ -109,35 +115,23 @@ export class TaskManagerComponent implements OnInit {
     });
   }
 
-  // --------------------
-  // Agregar tarea
-  // --------------------
   addTask(task: Tarea) {
     this.http.post<Tarea>(`${this.apiUrl}/tasks`, task, { headers: this.getAuthHeaders() })
       .subscribe(() => this.loadTasks());
   }
 
-  // --------------------
-  // Actualizar tarea
-  // --------------------
   updateTask(task: Tarea) {
     if (!task.id) return;
     this.http.patch<Tarea>(`${this.apiUrl}/tasks/${task.id}`, task, { headers: this.getAuthHeaders() })
       .subscribe(() => this.loadTasks());
   }
 
-  // --------------------
-  // Eliminar tarea
-  // --------------------
   deleteTask(task: Tarea) {
     if (!task.id) return;
     this.http.delete(`${this.apiUrl}/tasks/${task.id}`, { headers: this.getAuthHeaders() })
       .subscribe(() => this.loadTasks());
   }
 
-  // --------------------
-  // Filtrar tareas
-  // --------------------
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.toLowerCase().trim();
     this.dataSource.filterPredicate = (data: Tarea, filter: string) => {
@@ -150,4 +144,5 @@ export class TaskManagerComponent implements OnInit {
     };
     this.dataSource.filter = filterValue;
   }
+  
 }

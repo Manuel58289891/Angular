@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,6 +6,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 export interface Tarea {
   id?: number;
   nombre: string;
@@ -39,22 +41,27 @@ export class MyTaskComponent implements OnInit {
   displayedColumns: string[] = ['tarea', 'tipo', 'estado', 'acciones'];
   readonly http = inject(HttpClient);
 
-  usuarioCi: string = ''; // CI del usuario logueado
+  usuarioCi: string = '';
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
-    this.usuarioCi = localStorage.getItem('ci') || ''; // Guardar CI al hacer login
-    this.loadTasks();
+    if (isPlatformBrowser(this.platformId)) {
+      this.usuarioCi = localStorage.getItem('ci') || '';
+      this.loadTasks();
+    }
   }
 
   getAuthHeaders() {
-    const token = localStorage.getItem('token') || '';
+    let token = '';
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('token') || '';
+    }
     return { headers: new HttpHeaders({ Authorization: `Bearer ${token}` }) };
   }
 
   loadTasks() {
     this.http.get<Tarea[]>(`${this.apiUrl}/tasks`, this.getAuthHeaders())
       .subscribe(tareas => {
-        // Filtrar solo tareas del usuario logueado
         this.dataSource.data = tareas.filter(t => t.ci === this.usuarioCi);
       });
   }
