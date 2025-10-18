@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: string;
   ci: string;
+  name?: string;
   accessToken?: string;
 }
 
@@ -17,12 +18,14 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(user => {
-        // Guardamos el token y el usuario logueado en localStorage
-        localStorage.setItem('token', user.accessToken || '');
-        localStorage.setItem('currentUser', JSON.stringify(user));
+  login(email: string, password: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((res) => {
+        if (res && res.accessToken && res.user) {
+          // Guardar token y usuario correctamente
+          localStorage.setItem('token', res.accessToken);
+          localStorage.setItem('currentUser', JSON.stringify(res.user));
+        }
       })
     );
   }
@@ -43,13 +46,11 @@ export class AuthService {
     return this.http.get<User[]>(`${this.apiUrl}/users`, { headers });
   }
 
-  // ✅ Nuevo método que necesitamos para el AuthGuard
   getCurrentUser(): User | null {
     const userJson = localStorage.getItem('currentUser');
     return userJson ? JSON.parse(userJson) : null;
   }
 
-  // ✅ Para cerrar sesión
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');

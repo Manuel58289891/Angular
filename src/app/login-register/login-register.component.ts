@@ -67,40 +67,42 @@ export class LoginRegisterComponent {
   }
 
   login() {
-    const email = this.emailControl.value;
-    const password = this.passwordControl.value;
+  const email = this.emailControl.value;
+  const password = this.passwordControl.value;
 
-    if (!email || !password) {
-      this.loginError = 'Debe ingresar correo y contraseña';
-      return;
-    }
-
-    this.authService.login(email, password).subscribe({
-      next: (res: any) => {
-        if (!res || !res.user) {
-          this.loginError = 'No se recibió información del usuario';
-          return;
-        }
-
-        const user = res.user;
-
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('token', res.accessToken);
-          localStorage.setItem('currentUser', JSON.stringify(user)); 
-        }
-
-        const role = user.role.trim().toLowerCase();
-        if (role === 'admin') {
-          this.router.navigate(['/dashboard']); // Admin → dashboard
-        } else {
-          this.router.navigate(['/my-task']);  // Usuario normal → sus tareas
-        }
-      },
-      error: () => {
-        this.loginError = 'Correo o contraseña incorrectos';
-      }
-    });
+  if (!email || !password) {
+    this.loginError = 'Debe ingresar correo y contraseña';
+    return;
   }
+
+  this.authService.login(email, password).subscribe({
+    next: (res: any) => {
+      if (!res || !res.user) {
+        this.loginError = 'No se recibió información del usuario';
+        return;
+      }
+
+      const user = res.user;
+
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('token', res.accessToken);
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('ci', user.ci || '');
+      }
+
+      const role = user.role.trim().toLowerCase();
+      if (role === 'admin') {
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.router.navigate(['/my-task']);
+      }
+    },
+    error: () => {
+      this.loginError = 'Correo o contraseña incorrectos';
+    }
+  });
+}
+
 
   register() {
     const nombre = this.nombreCompletoControlRegistro.value;

@@ -44,12 +44,14 @@ export class MyTaskComponent implements OnInit {
   usuarioCi: string = '';
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.usuarioCi = localStorage.getItem('ci') || '';
-      this.loadTasks();
-    }
+ ngOnInit(): void {
+  if (isPlatformBrowser(this.platformId)) {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    this.usuarioCi = currentUser?.ci || '';
+    this.loadTasks();
   }
+}
+
 
   getAuthHeaders() {
     let token = '';

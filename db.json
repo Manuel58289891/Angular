@@ -1,14 +1,6 @@
 {
   "users": [
     {
-      "email": "jorge@gmail.com",
-      "password": "$2a$10$offDRRPNsgJjTD4PmvCmoevnXjCfl7WO4tRyY0csZ2BHDFoRrgxuC",
-      "name": "Jorge Perez Paz",
-      "role": "Admin",
-      "ci": "01104655614",
-      "id": 1
-    },
-    {
       "email": "juana@gmail.com",
       "password": "$2a$10$yOqa3kH8smlxQn7mDTIsduBgKXbSWgcNJmhM018ac4RGa8AIQPnAe",
       "name": "Juana Bacallao Zamora",
@@ -28,9 +20,17 @@
       "email": "juan@gmail.com",
       "password": "$2a$10$aehvyv.K3nFdhccXtVL4/e3vo05KGR1Sy94b/D7i4dALkL7YLy.N2",
       "name": "Olga Ruiz Paz",
-      "role": "Usuario",
+      "role": "Admin",
       "ci": "56478912330",
       "id": 5
+    },
+    {
+      "email": "lacho@gmail.com",
+      "password": "$2a$10$g716HtSynaWoCqrYybWIbOwlgXC6mmYaVgWqTLVePkArpK7124t42",
+      "name": "Lazaro Leon Rodriguez",
+      "role": "Usuario",
+      "ci": "03111564722",
+      "id": 6
     }
   ],
   "tasks": [
@@ -42,6 +42,15 @@
       "tarea": "Corre de aqui al Ameijeiras",
       "estado": "Pendiente",
       "id": 1
+    },
+    {
+      "nombre": "Marcos",
+      "apellidos": "Torres Pompa",
+      "ci": "54120345561",
+      "tipo": "Frontend",
+      "tarea": "Darle de comer a las palomas",
+      "estado": "Pendiente",
+      "id": 2
     }
   ]
 }
